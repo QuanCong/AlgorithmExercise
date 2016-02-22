@@ -1,4 +1,5 @@
 package com.songxu.algorithm.sort;
+
 /**
  * 堆排序
  * @author songxu
@@ -18,9 +19,9 @@ public class HeapSort {
 		
 		int tmpVal=srcArr[pos];
 		
-		for(int i=pos*2;i<length-1;i*=2)
+		for(int i=pos*2;i<=length;i*=2)
 		{
-			if(i<length-1&&srcArr[i]<srcArr[i+1])
+			if(i<length&&srcArr[i]<srcArr[i+1])
 			{
 				i++;
 			}
@@ -31,7 +32,7 @@ public class HeapSort {
 		    srcArr[pos]=srcArr[i];//交换找到的最大值位置与pos游标指向的堆顶 
 		    
 		    /*
-		     * 交换一次堆顶后  可以子堆不再满足大顶堆的条件 因而需要遍历子堆  再次构造大顶堆
+		     * 交换一次堆顶后  可能子堆不再满足大顶堆的条件 因而需要遍历子堆  再次构造大顶堆
 		     * 这里虽然没有执行交换操作 但是上面的if判断始终与tepVal进行比较 相当于把堆顶元素已经交换了一次
 		     */
 		    pos=i; 
@@ -55,21 +56,28 @@ public class HeapSort {
 		
 		//step1:调整堆为大顶堆
 		int length=array.length;
+		//填充数组 使得原数组下标从1开始
+		int []arrayPushZero=new int [length+1];
+		arrayPushZero[0]=Integer.MIN_VALUE;
+		System.arraycopy(array, 0, arrayPushZero, 1, array.length);
 		
-		for(int i=length/2;i>=0;i--)//从右至左  从下至上  把每个非叶节点当做根构造大顶堆
+		
+		for(int i=length/2;i>0;i--)//从右至左  从下至上  把每个非叶节点当做根构造大顶堆
 		{
-			heapAdjust(array, i,array.length);
+			heapAdjust(arrayPushZero, i,length);
 		}
-		for(int i=array.length-1;i>=0;i--)
+		for(int i=length;i>1;i--)
 		{
-			swap(array, 0, i);
-			heapAdjust(array, 0,i-1);//除去已排序的元素以后 再次构造大顶堆 因此最后一个参数length始终在变化
+			swap(arrayPushZero, 1, i);
+			heapAdjust(arrayPushZero, 1,i-1);//除去已排序的元素以后 再次构造大顶堆 因此最后一个参数length始终在变化
 			
 		}
-		
+		System.arraycopy(arrayPushZero, 1, array, 0, length);
 	}
 	
 	public static void main(String[] args) {
+		
+	
 		int []arr=new int []{50,10,90,30,70,40,80,60,20};
 		HeapSort heapSort=new HeapSort();
 		heapSort.heapSort(arr);
@@ -77,6 +85,7 @@ public class HeapSort {
 		for (int i : arr) {
 			System.out.print(i+" ");
 		}
+		System.out.println(9/2);
 	}
 	
 	
